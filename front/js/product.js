@@ -44,14 +44,19 @@ fetch(`${productApi}`)
       .getElementById('description')
       .textContent = article.description;
 
-    for (let color of article.colors) { 
-      document
-        .getElementById('colors')
-        .innerHTML +=
-          `<option value="${color}">${color}</option>`
-    }
+    let optionsHtml = new DocumentFragment();  
+    for (let color of article.colors) {
+      let optionElement = document.createElement("option");
+      optionElement.setAttribute("value",`${color}`);
+      optionElement.textContent = `${color}`;
 
-    let item = new Article(article._id, null, 0);
+      optionsHtml.append(optionElement);
+    }
+    document
+    .getElementById('colors')
+    .append(optionsHtml);
+
+    let item = new Article(article._id, null, 0,article.name, article.price, article.imageUrl,article.altTxt);
     document
       .getElementById('colors')
       .addEventListener('change', function(event) {
