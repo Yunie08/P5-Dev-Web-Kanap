@@ -5,9 +5,10 @@ fetch('http://localhost:3000/api/products/')
     }
   })
   .then(function(jsonArticleList) {
+    let articleHtml = "";
     for (let article of jsonArticleList) {
       
-      let articleHtml =
+      articleHtml +=
         `<a href="./product.html?id=${article._id}">
           <article>
             <img src="${article.imageUrl}" alt="${article.altTxt}" />
@@ -15,11 +16,10 @@ fetch('http://localhost:3000/api/products/')
             <p class="productDescription">${article.description}</p>
           </article>
         </a>`;
-
-      document
-        .getElementById('items')
-        .innerHTML += articleHtml;
     }
+    document
+        .getElementById('items')
+        .innerHTML = articleHtml;
   })
   .catch(function(err){
     console.log(err);
