@@ -61,17 +61,17 @@ fetch(`${productApi}`)
     document
       .getElementById('quantity')
       .addEventListener('change', function(event) {
-        item.quantity = event.target.value;
+        item.quantity = Number(event.target.value);
       })
 
     document
       .getElementById('addToCart')
       .addEventListener('click', function(event){
-        console.log(item);
         if ((item.color === null) || (item.quantity === 0)) {
           alert('Pour ajouter un article au panier, renseigner une couleur et une quantité.')
         } else {
           addArticle(item);
         }
       })
+    
   });
