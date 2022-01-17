@@ -31,6 +31,7 @@ function addArticle(article) {
     console.log(cart);
     cart.push(article);
   }
+  sortCart(cart);
   saveCart(cart);
 }
 
@@ -52,3 +53,30 @@ function getCart() {
 function saveCart(cart) {
   localStorage.setItem('cart', JSON.stringify(cart));
 }
+
+/**
+ * String comparison function used to sort cart array
+ * @param { String } article.name
+ * @param { String } article.name
+ * @return { Number } 
+ * 1 if a.name comes before b.name
+ * 0 if a.name = b.name
+ * -1 if b.name comes before a.name
+ */
+function compare(a,b) {
+  if (a.name > b.name) {
+    return 1;
+  }
+  if (a.name < b.name) {
+    return -1;
+  }
+  return 0;
+}
+
+/**
+ * Sort cart articles by their name (alphabetically)
+ */
+function sortCart(cart){
+  cart.sort(compare);
+}
+
