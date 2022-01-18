@@ -92,12 +92,8 @@ function setTotalPrice(){
     .innerText =  `${computeTotalPrice()}`;
 }
 
-setTotalPrice();
 setTotalQuantity();
-
-document
-  .getElementById("totalPrice")
-  .innerText =  `${totalPrice}`;
+setTotalPrice();
 
 /**
  * Listen to click event on any ".deleteItem" button
@@ -110,8 +106,6 @@ removeButtonsArray.forEach(function(button) {
   button.addEventListener('click', function(event){
     event.stopPropagation();
     let closestArticle = button.closest("article");
-    console.log(closestArticle.dataset.id);
-    console.log(closestArticle.dataset.color);
     removeArticle(closestArticle.dataset.id,closestArticle.dataset.color);
     setTotalQuantity();
     setTotalPrice();
@@ -135,4 +129,93 @@ quantityInputsArray.forEach(function(quantityInput) {
     setTotalQuantity();
     setTotalPrice();
   })
+})
+
+
+/**
+ * Listen to change event on any form input
+ * On change: validates input or display error message
+ */
+//  let formInputsCollection = document.querySelectorAll("div.cart__order__form__question > input");
+//  let formInputsArray = Array.from(formInputsCollection);
+ 
+//  formInputsArray.forEach(function(formInput) {
+//   formInput.addEventListener('change', function(event){
+//     event.stopPropagation();
+//     let inputId = formInput.getAttribute("id");
+//     if ((inputId == "firstName") || (inputId == "LastName") {
+//       checkName(formInput.target.value);
+//     }
+//     if (inputId == "address") {
+//       checkAdress(formInput.target.value);
+//     }
+//     if (inputId == "city") {
+//       checkCity
+//     }
+//   })
+
+let firstname = document.getElementById("firstName");
+let firstNameErrorMsg = document.getElementById("firstNameErrorMsg");
+
+firstname
+  .addEventListener('change', function(event) {
+    event.stopPropagation();
+    if ((event.target.value != "") && (nameIsValid(event.target.value) == false)) {
+      firstNameErrorMsg.innerText = "Le prénom n'est pas valide (contient chiffres et/ou caractères spéciaux)";
+    }
+    else {
+      clearMessage(firstNameErrorMsg);
+    }
+})
+
+let lastname = document.getElementById("lastName");
+let lastNameErrorMsg = document.getElementById("lastNameErrorMsg");
+lastname
+  .addEventListener('change', function(event) {
+    event.stopPropagation();
+    if ((event.target.value != "") && (nameIsValid(event.target.value) == false)) {
+      lastNameErrorMsg.innerText = "Le nom n'est pas valide (contient chiffres et/ou caractères spéciaux)";
+    }
+    else {
+      clearMessage(lastNameErrorMsg);
+    }
+})
+
+let address = document.getElementById("address");
+let addressErrorMsg = document.getElementById("addressErrorMsg");
+address
+  .addEventListener('change', function(event) {
+    event.stopPropagation();
+    if ((event.target.value != "") && (addressIsValid(event.target.value) == false)) {
+      addressErrorMsg.innerText = "L'adresse n'est pas valide";
+    }
+    else {
+      clearMessage(addressErrorMsg);
+    }
+})
+
+let city = document.getElementById("city");
+let cityErrorMsg = document.getElementById("cityErrorMsg");
+city
+  .addEventListener('change', function(event) {
+    event.stopPropagation();
+    if ((event.target.value != "") && (nameIsValid(event.target.value) == false)) {
+      cityErrorMsg.innerText = "La ville n'est pas valide";
+    }
+    else {
+      clearMessage(cityErrorMsg);
+    }
+})
+
+let email = document.getElementById("email");
+let emailErrorMsg = document.getElementById("emailErrorMsg");
+email
+  .addEventListener('change', function(event) {
+    event.stopPropagation();
+    if ((event.target.value != "") && (emailIsValid(event.target.value) == false)) {
+      emailErrorMsg.innerText = "L'adresse email n'est pas valide";
+    }
+    else {
+      clearMessage(emailErrorMsg);
+    }
 })
