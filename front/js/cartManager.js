@@ -11,11 +11,9 @@ function isInCart(articleId,articleColor) {
   let cart = getCart();
   for (let item in cart) {
     if ((cart[item].id == articleId) && (cart[item].color == articleColor)) {
-      console.log(item);
       return item;
     }
   }
-  console.log(-1);
   return -1;
 }
 
@@ -27,10 +25,8 @@ function isInCart(articleId,articleColor) {
 function addArticle(article) {
   let cart = getCart();
   if (isInCart(article.id,article.color) != -1) {
-    console.log("déjà présent dans panier");
     cart[isInCart(article.id,article.color)].quantity += article.quantity;
   } else {
-    console.log(cart);
     cart.push(article);
   }
   sortCart(cart);
@@ -118,7 +114,6 @@ function computeTotalQuantity(){
   for (let item in cart){
     totalQuantity += Number(cart[item].quantity);
   }
-  console.log(totalQuantity);
   return totalQuantity;
 }
 
@@ -131,7 +126,6 @@ function computeTotalPrice(){
   for (let item in cart){
     totalPrice += cart[item].price * Number(cart[item].quantity);
   }
-  console.log(totalPrice);
   return totalPrice;
 }
 
