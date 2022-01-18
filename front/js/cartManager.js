@@ -37,6 +37,15 @@ function addArticle(article) {
   saveCart(cart);
 }
 
+function setArticleQuantity(articleId,articleColor,articleQuantity) {
+  let cart = getCart();
+  let articleInCart = isInCart(articleId,articleColor);
+  if (articleQuantity > 0){
+    cart[articleInCart].quantity = articleQuantity;
+  }
+  saveCart(cart);
+}
+
 
 /**
  * Remove article from cart
@@ -49,7 +58,6 @@ function addArticle(article) {
   saveCart(cart);
   }
 }
-
 
 
 /**

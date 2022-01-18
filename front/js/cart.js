@@ -3,6 +3,9 @@ let cart = getCart();
 let cartHtml = new DocumentFragment;
 let cartSection = document.getElementById("cart__items");
 
+/**
+ * Create DOM elements for each item in cart
+ */
 for (let article of cart) {
 
   let articleElement = document.createElement("article");
@@ -72,8 +75,16 @@ for (let article of cart) {
   cartHtml.append(articleElement);
 }
 
-  cartSection.append(cartHtml);
+/**
+ * Insert created articles in HTML
+ */
+cartSection.append(cartHtml);
 
+
+/**
+ * Listen to click event on any ".deleteItem" button
+ * On click : remove related article from page and cart
+ */
 let removeButtonsCollection = document.getElementsByClassName("deleteItem");
 let removeButtonsArray = Array.from(removeButtonsCollection);
 
@@ -87,3 +98,19 @@ removeButtonsArray.forEach(function(button) {
     cartSection.removeChild(closestArticle);
   })
 });
+
+
+/**
+ * Listen to change event on any "itemQuantity" input
+ * On change: update article quantity in cart
+ */
+let quantityInputsCollection = document.getElementsByClassName("itemQuantity");
+let quantityInputsArray = Array.from(quantityInputsCollection);
+
+quantityInputsArray.forEach(function(quantityInput) {
+  quantityInput.addEventListener('change', function(event){
+    event.stopPropagation();
+    let closestArticle = quantityInput.closest("article");
+    setArticleQuantity(closestArticle.dataset.id,closestArticle.dataset.color, event.target.value)
+  })
+})
