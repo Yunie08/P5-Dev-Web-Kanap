@@ -109,3 +109,31 @@ function sortCart(cart){
 }
 
 
+/**
+ * Return total number of articles in cart
+ */
+function computeTotalQuantity(){
+  let cart = getCart();
+  let totalQuantity = 0;
+  for (let item in cart){
+    totalQuantity += Number(cart[item].quantity);
+  }
+  console.log(totalQuantity);
+  return totalQuantity;
+}
+
+/**
+ * Return total cart price
+ */
+function computeTotalPrice(){
+  let cart = getCart();
+  let totalPrice = 0;
+  for (let item in cart){
+    totalPrice += cart[item].price * Number(cart[item].quantity);
+  }
+  console.log(totalPrice);
+  return totalPrice;
+}
+
+
+

@@ -80,6 +80,24 @@ for (let article of cart) {
  */
 cartSection.append(cartHtml);
 
+function setTotalQuantity(){
+  document
+    .getElementById("totalQuantity")
+    .innerText =  `${computeTotalQuantity()}`;
+}
+
+function setTotalPrice(){
+  document
+    .getElementById("totalPrice")
+    .innerText =  `${computeTotalPrice()}`;
+}
+
+setTotalPrice();
+setTotalQuantity();
+
+document
+  .getElementById("totalPrice")
+  .innerText =  `${totalPrice}`;
 
 /**
  * Listen to click event on any ".deleteItem" button
@@ -95,6 +113,8 @@ removeButtonsArray.forEach(function(button) {
     console.log(closestArticle.dataset.id);
     console.log(closestArticle.dataset.color);
     removeArticle(closestArticle.dataset.id,closestArticle.dataset.color);
+    setTotalQuantity();
+    setTotalPrice();
     cartSection.removeChild(closestArticle);
   })
 });
@@ -111,6 +131,8 @@ quantityInputsArray.forEach(function(quantityInput) {
   quantityInput.addEventListener('change', function(event){
     event.stopPropagation();
     let closestArticle = quantityInput.closest("article");
-    setArticleQuantity(closestArticle.dataset.id,closestArticle.dataset.color, event.target.value)
+    setArticleQuantity(closestArticle.dataset.id,closestArticle.dataset.color, event.target.value);
+    setTotalQuantity();
+    setTotalPrice();
   })
 })
