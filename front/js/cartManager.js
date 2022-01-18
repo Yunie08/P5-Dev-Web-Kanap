@@ -3,13 +3,15 @@
 
 /**
  * Check if an article is already in cart (same id and color)
- * @param { Article } article
+ * @param { String } article.id
+ * @param { String } article.color
  * @return { Number } cart[index] where article is found or -1 if not found
  */
-function isInCart(article) {
+function isInCart(articleId,articleColor) {
   let cart = getCart();
   for (let item in cart) {
-    if ((cart[item].id == article.id) && (cart[item].color == article.color)) {
+    if ((cart[item].id == articleId) && (cart[item].color == articleColor)) {
+      console.log(item);
       return item;
     }
   }
@@ -24,9 +26,9 @@ function isInCart(article) {
  */
 function addArticle(article) {
   let cart = getCart();
-  if (isInCart(article) != -1) {
+  if (isInCart(article.id,article.color) != -1) {
     console.log("déjà présent dans panier");
-    cart[isInCart(article)].quantity += article.quantity;
+    cart[isInCart(article.id,article.color)].quantity += article.quantity;
   } else {
     console.log(cart);
     cart.push(article);
@@ -34,6 +36,21 @@ function addArticle(article) {
   sortCart(cart);
   saveCart(cart);
 }
+
+
+/**
+ * Remove article from cart
+ */
+ function removeArticle(articleId,articleColor){
+  let cart = getCart();
+  let articleInCart = isInCart(articleId,articleColor);
+  if (articleInCart != -1) {
+  cart.splice((articleInCart), 1);
+  saveCart(cart);
+  }
+}
+
+
 
 /**
  * Retrieve cart from localStorage and parse it
@@ -47,12 +64,14 @@ function getCart() {
   return cart;
 }
 
+
 /**
  * Save cart in localStorage
  */
 function saveCart(cart) {
   localStorage.setItem('cart', JSON.stringify(cart));
 }
+
 
 /**
  * String comparison function used to sort cart array
@@ -73,10 +92,12 @@ function compare(a,b) {
   return 0;
 }
 
+
 /**
  * Sort cart articles by their name (alphabetically)
  */
 function sortCart(cart){
   cart.sort(compare);
 }
+
 

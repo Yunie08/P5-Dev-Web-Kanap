@@ -1,6 +1,7 @@
 
 let cart = getCart();
 let cartHtml = new DocumentFragment;
+let cartSection = document.getElementById("cart__items");
 
 for (let article of cart) {
 
@@ -69,9 +70,20 @@ for (let article of cart) {
   div6Element.append(p4Element);
 
   cartHtml.append(articleElement);
-
 }
 
-document
-  .getElementById("cart__items")
-  .append(cartHtml);
+  cartSection.append(cartHtml);
+
+let removeButtonsCollection = document.getElementsByClassName("deleteItem");
+let removeButtonsArray = Array.from(removeButtonsCollection);
+
+removeButtonsArray.forEach(function(button) {
+  button.addEventListener('click', function(event){
+    event.stopPropagation();
+    let closestArticle = button.closest("article");
+    console.log(closestArticle.dataset.id);
+    console.log(closestArticle.dataset.color);
+    removeArticle(closestArticle.dataset.id,closestArticle.dataset.color);
+    cartSection.removeChild(closestArticle);
+  })
+});
