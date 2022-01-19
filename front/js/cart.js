@@ -210,6 +210,7 @@ email
 let submit = document.getElementById("order");
 
 let orderInfo = new Order();
+console.log(orderInfo);
 
 function getOrderId(value){
   console.log(value.orderId);
@@ -221,9 +222,8 @@ function redirect(id){
 }
 
 function sendOrder(e) {
-  e.preventDefault();
-  orderInfo.products = getIds();
-  orderInfo.contact = contact;
+  
+
   console.log(orderInfo);
   fetch("http://localhost:3000/api/products/order", {
     method: "POST",
@@ -248,7 +248,33 @@ function sendOrder(e) {
   })
 }
 
-submit.addEventListener('click', sendOrder);
+function inputIsComplete() {
+  for (let data in orderInfo.contact) {
+    if ((orderInfo.contact[data] == "") || (orderInfo.contact[data] == undefined)) {
+      console.log("coucou");
+      return false;
+    }
+  }
+  return true;
+}
+
+let submitErrMsg = document.getElementById("submitErrorMsg");
+
+submit.addEventListener('click', function(e){
+  e.preventDefault();
+  orderInfo.products = getIds();
+  orderInfo.contact = contact;
+  let inputComplete = inputIsComplete();
+  if (getIds() == 0) {
+    submitErrMsg.innerText = "Votre panier est vide";
+  }
+  else if (inputComplete == false) {
+    console.log("je suis là");
+    submitErrMsg.innerText = "Veuillez renseigner tous les champs du formulaire";
+  } else {
+    sendOrder();
+  }
+});
 
 
 
