@@ -129,5 +129,16 @@ function computeTotalPrice(){
   return totalPrice;
 }
 
+/**
+ * Return array with product IDs
+ */
+function getIds(){
+  let cart = getCart();
+  let idsArray = [];
+  for (let item in cart) {
+    idsArray.push(cart[item].id);
+  }
+  return idsArray;
+}
 
 

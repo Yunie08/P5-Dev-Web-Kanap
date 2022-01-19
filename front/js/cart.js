@@ -132,27 +132,8 @@ quantityInputsArray.forEach(function(quantityInput) {
 })
 
 
-/**
- * Listen to change event on any form input
- * On change: validates input or display error message
- */
-//  let formInputsCollection = document.querySelectorAll("div.cart__order__form__question > input");
-//  let formInputsArray = Array.from(formInputsCollection);
- 
-//  formInputsArray.forEach(function(formInput) {
-//   formInput.addEventListener('change', function(event){
-//     event.stopPropagation();
-//     let inputId = formInput.getAttribute("id");
-//     if ((inputId == "firstName") || (inputId == "LastName") {
-//       checkName(formInput.target.value);
-//     }
-//     if (inputId == "address") {
-//       checkAdress(formInput.target.value);
-//     }
-//     if (inputId == "city") {
-//       checkCity
-//     }
-//   })
+let contact = new Contact();
+let order = [];
 
 let firstname = document.getElementById("firstName");
 let firstNameErrorMsg = document.getElementById("firstNameErrorMsg");
@@ -164,6 +145,7 @@ firstname
       firstNameErrorMsg.innerText = "Le prénom n'est pas valide (contient chiffres et/ou caractères spéciaux)";
     }
     else {
+      contact.firstName = event.target.value;
       clearMessage(firstNameErrorMsg);
     }
 })
@@ -177,6 +159,7 @@ lastname
       lastNameErrorMsg.innerText = "Le nom n'est pas valide (contient chiffres et/ou caractères spéciaux)";
     }
     else {
+      contact.lastName = event.target.value;
       clearMessage(lastNameErrorMsg);
     }
 })
@@ -190,6 +173,7 @@ address
       addressErrorMsg.innerText = "L'adresse n'est pas valide";
     }
     else {
+      contact.address = event.target.value;
       clearMessage(addressErrorMsg);
     }
 })
@@ -203,6 +187,7 @@ city
       cityErrorMsg.innerText = "La ville n'est pas valide";
     }
     else {
+      contact.city = event.target.value;
       clearMessage(cityErrorMsg);
     }
 })
@@ -216,6 +201,55 @@ email
       emailErrorMsg.innerText = "L'adresse email n'est pas valide";
     }
     else {
+      contact.email = event.target.value;
       clearMessage(emailErrorMsg);
     }
 })
+
+
+let submit = document.getElementById("order");
+
+let orderInfo = new Order();
+
+function getOrderId(value){
+  console.log(value.orderId);
+  return value.orderId;
+}
+
+function redirect(id){
+  document.location = `./confirmation.html?orderId=${id}`;
+}
+
+function sendOrder(e) {
+  e.preventDefault();
+  orderInfo.products = getIds();
+  orderInfo.contact = contact;
+  console.log(orderInfo);
+  fetch("http://localhost:3000/api/products/order", {
+    method: "POST",
+    headers: {
+      'Accept': 'application/json', 
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(orderInfo)
+  })
+  .then(function(res){
+    if (res.ok) {
+      return res.json();
+    }
+  })
+  .then(function(data){
+    let id = getOrderId(data);
+    console.log(id);
+    return id;
+  })
+  .then(function(id){
+    redirect(id);
+  })
+}
+
+submit.addEventListener('click', sendOrder);
+
+
+
+
