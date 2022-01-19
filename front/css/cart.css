@@ -120,6 +120,7 @@ h2 {
 .cart__order__form__submit {
 	display: flex;
 	justify-content: center;
+	position: relative;
 }
 .cart__order__form__submit input {
 	font-size: 22px;
@@ -130,12 +131,19 @@ h2 {
 	padding: 18px 28px;
 	cursor: pointer;
 	margin-top: 40px;
+	
 }
 .cart__order__form__submit input:hover {
 	box-shadow: rgb(42 18 206 / 90%) 0 0 22px 6px;
 }
 
-
+.cart__order__form__submit p {
+	position: absolute;
+	color: #fbbcbc;
+	font-size: 15px;
+	top : -10px;
+	
+}
 
 /***************/
 /*Media queries*/
