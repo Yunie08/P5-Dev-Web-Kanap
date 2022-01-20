@@ -6,7 +6,7 @@
  */
 
 function nameIsValid(name) {
-  let namePattern = /^[\w'\-,.][^0-9_!¡?÷?¿\/\+=@#$%ˆ^&*(){}|~<>;:[\]]{0,}$/;
+  let namePattern = /^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$/;
   return namePattern.test(name);
 }
 
