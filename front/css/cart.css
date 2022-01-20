@@ -142,7 +142,7 @@ h2 {
 	color: #fbbcbc;
 	font-size: 15px;
 	top : -10px;
-	
+	text-align: center;
 }
 
 /***************/
@@ -152,6 +152,9 @@ h2 {
 @media (max-width: 991.98px) {
 	.cart__item__content__titlePrice {
 		flex-direction: column;
+	}
+	.cart__order__form__submit p {
+		top : -20px;
 	}
 }
 
