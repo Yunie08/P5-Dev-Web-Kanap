@@ -131,77 +131,100 @@ quantityInputsArray.forEach(function(quantityInput) {
   })
 })
 
-
+/*************** Contact Form Management ***************/
 let contact = new Contact();
 let order = [];
+let inputCheck = {
+  firstNameValid : false,
+  lastNameValid : false,
+  addressValid : false,
+  cityValid : false,
+  emailValid : false,
+  cartValid : false
+}
 
+/* "Prénom" input management */
 let firstname = document.getElementById("firstName");
 let firstNameErrorMsg = document.getElementById("firstNameErrorMsg");
 
 firstname
   .addEventListener('change', function(event) {
     event.stopPropagation();
-    if ((event.target.value != "") && (nameIsValid(event.target.value) == false)) {
+    if ((event.target.value == "") || (nameIsValid(event.target.value) == false)) {
+      inputCheck.firstNameValid = false;
       firstNameErrorMsg.innerText = "Le prénom n'est pas valide (contient chiffres et/ou caractères spéciaux)";
     }
     else {
       contact.firstName = event.target.value;
+      inputCheck.firstNameValid = true;
       clearMessage(firstNameErrorMsg);
     }
 })
 
+/* "Nom" input management */
 let lastname = document.getElementById("lastName");
 let lastNameErrorMsg = document.getElementById("lastNameErrorMsg");
 lastname
   .addEventListener('change', function(event) {
     event.stopPropagation();
-    if ((event.target.value != "") && (nameIsValid(event.target.value) == false)) {
+    if ((event.target.value == "") || (nameIsValid(event.target.value) == false)) {
+      inputCheck.lastNameValid = false;
       lastNameErrorMsg.innerText = "Le nom n'est pas valide (contient chiffres et/ou caractères spéciaux)";
     }
     else {
       contact.lastName = event.target.value;
+      inputCheck.lastNameValid = true;
       clearMessage(lastNameErrorMsg);
     }
 })
 
+/* "Adresse" input management */
 let address = document.getElementById("address");
 let addressErrorMsg = document.getElementById("addressErrorMsg");
 address
   .addEventListener('change', function(event) {
     event.stopPropagation();
-    if ((event.target.value != "") && (addressIsValid(event.target.value) == false)) {
+    if ((event.target.value == "") || (addressIsValid(event.target.value) == false)) {
+      inputCheck.addressValid = false;
       addressErrorMsg.innerText = "L'adresse n'est pas valide";
     }
     else {
       contact.address = event.target.value;
+      inputCheck.addressValid = true;
       clearMessage(addressErrorMsg);
     }
 })
 
+/* "Ville" input management */
 let city = document.getElementById("city");
 let cityErrorMsg = document.getElementById("cityErrorMsg");
 city
   .addEventListener('change', function(event) {
     event.stopPropagation();
-    if ((event.target.value != "") && (nameIsValid(event.target.value) == false)) {
+    if ((event.target.value == "") || (nameIsValid(event.target.value) == false)) {
+      inputCheck.cityValid = false;
       cityErrorMsg.innerText = "La ville n'est pas valide";
     }
     else {
       contact.city = event.target.value;
+      inputCheck.cityValid = true;
       clearMessage(cityErrorMsg);
     }
 })
 
+/* "Email" input management */
 let email = document.getElementById("email");
 let emailErrorMsg = document.getElementById("emailErrorMsg");
 email
   .addEventListener('change', function(event) {
     event.stopPropagation();
-    if ((event.target.value != "") && (emailIsValid(event.target.value) == false)) {
+    if ((event.target.value == "") || (emailIsValid(event.target.value) == false)) {
+      inputCheck.emailValid = false;
       emailErrorMsg.innerText = "L'adresse email n'est pas valide";
     }
     else {
       contact.email = event.target.value;
+      inputCheck.emailValid = true;
       clearMessage(emailErrorMsg);
     }
 })
@@ -211,6 +234,23 @@ let submit = document.getElementById("order");
 
 let orderInfo = new Order();
 
+// function formIsComplete() {
+//   for (let data in orderInfo.contact) {
+//     if ((orderInfo.contact[data] == "") || (orderInfo.contact[data] == undefined)) {
+//       return false;
+//     }
+//   }
+//   return true;
+// }
+
+function dataIsValid(dataCheckArray) {
+  let dataValidity = true;
+  for (let item in dataCheckArray) {
+    dataValidity = (dataValidity && dataCheckArray[item]);
+  }
+  return dataValidity;
+}
+
 function getOrderId(value){
   return value.orderId;
 }
@@ -218,6 +258,8 @@ function getOrderId(value){
 function redirect(id){
   document.location = `./confirmation.html?orderId=${id}`;
 }
+
+
 
 function sendOrder(e) {
   fetch("http://localhost:3000/api/products/order", {
@@ -242,14 +284,7 @@ function sendOrder(e) {
   })
 }
 
-function inputIsComplete() {
-  for (let data in orderInfo.contact) {
-    if ((orderInfo.contact[data] == "") || (orderInfo.contact[data] == undefined)) {
-      return false;
-    }
-  }
-  return true;
-}
+
 
 let submitErrMsg = document.getElementById("submitErrorMsg");
 
@@ -257,16 +292,29 @@ submit.addEventListener('click', function(e){
   e.preventDefault();
   orderInfo.products = getIds();
   orderInfo.contact = contact;
-  let inputComplete = inputIsComplete();
-  if (getIds() == 0) {
-    submitErrMsg.innerText = "Votre panier est vide";
-  }
-  else if (inputComplete == false) {
-    submitErrMsg.innerText = "Veuillez renseigner tous les champs du formulaire";
+  inputCheck.cartValid = (orderInfo.products != 0);
+  let inputValid = dataIsValid(inputCheck);
+  if (inputValid == false) {
+    if (inputCheck.cartValid == false) {
+      submitErrMsg.innerText = "Votre panier est vide";
+    } else {
+      submitErrMsg.innerText = "Veuillez vérifier les informations de contact";
+    }
   } else {
     sendOrder();
   }
 });
+
+/**
+ * Remove submit message error whenever there is an input change
+ */
+let inputList = document.querySelectorAll(".cart__order__form__question > input");
+
+for (let input of inputList){
+  input.addEventListener('change', function(e){
+    clearMessage(submitErrMsg);
+  });
+}
 
 
 
