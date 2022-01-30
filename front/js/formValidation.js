@@ -1,7 +1,7 @@
 /**
  * Check string validity
  * Not valid if the string contains numbers or special characters
- * @param { String } name (can be user firstname or lastname)  
+ * @param { String } name (can be user firstname or lastname)
  * @returns { boolean } true if name is valid, false if invalid
  */
 
@@ -19,7 +19,6 @@ function emailIsValid(email) {
   let emailPattern = /^[\w\.-]+@[\w\.-]+\.\w{2,4}$/;
   return emailPattern.test(email);
 }
-
 
 function clearMessage(element) {
   element.innerText = "";

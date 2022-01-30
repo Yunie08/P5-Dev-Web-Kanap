@@ -9,7 +9,7 @@ class Contact {
 }
 
 class Order {
-  constructor(contact, products){
+  constructor(contact, products) {
     this.contact = contact;
     this.products = products;
   }

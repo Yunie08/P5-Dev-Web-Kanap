@@ -1,5 +1,5 @@
 class Article {
-  constructor(id,color,quantity,name,price,imageUrl,altTxt) {
+  constructor(id, color, quantity, name, price, imageUrl, altTxt) {
     this.id = id;
     this.color = color;
     this.quantity = quantity;

@@ -1,15 +1,14 @@
-fetch('http://localhost:3000/api/products/')
-  .then(function(res) {
+fetch("http://localhost:3000/api/products/")
+  .then(function (res) {
     if (res.ok) {
       return res.json();
     }
   })
-  .then(function(jsonArticleList) {
+  .then(function (jsonArticleList) {
     let articleHtml = new DocumentFragment();
     for (let article of jsonArticleList) {
-      
       let aElement = document.createElement("a");
-      aElement.setAttribute("href",`./product.html?id=${article._id}`);
+      aElement.setAttribute("href", `./product.html?id=${article._id}`);
 
       let articleElement = document.createElement("article");
 
@@ -25,15 +24,13 @@ fetch('http://localhost:3000/api/products/')
       pElement.classList.add("productDescription");
       pElement.innerText = `${article.description}`;
 
-      articleElement.append(imgElement,h3Element,pElement);
+      articleElement.append(imgElement, h3Element, pElement);
       aElement.append(articleElement);
 
       articleHtml.append(aElement);
     }
-    document
-        .getElementById('items')
-        .append(articleHtml) ;
+    document.getElementById("items").append(articleHtml);
   })
-  .catch(function(err){
+  .catch(function (err) {
     console.log(err);
   });
