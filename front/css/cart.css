@@ -106,6 +106,7 @@ h2 {
 	border: 0;
 	height: 26px;
 	margin-top: 4px;
+	padding-left: 13px;
 }
 .cart__order__form__question input:focus {
 	outline: none;
@@ -119,6 +120,7 @@ h2 {
 .cart__order__form__submit {
 	display: flex;
 	justify-content: center;
+	position: relative;
 }
 .cart__order__form__submit input {
 	font-size: 22px;
@@ -129,12 +131,19 @@ h2 {
 	padding: 18px 28px;
 	cursor: pointer;
 	margin-top: 40px;
+	
 }
 .cart__order__form__submit input:hover {
 	box-shadow: rgb(42 18 206 / 90%) 0 0 22px 6px;
 }
 
-
+.cart__order__form__submit p {
+	position: absolute;
+	color: #fbbcbc;
+	font-size: 15px;
+	top : -10px;
+	text-align: center;
+}
 
 /***************/
 /*Media queries*/
@@ -143,6 +152,9 @@ h2 {
 @media (max-width: 991.98px) {
 	.cart__item__content__titlePrice {
 		flex-direction: column;
+	}
+	.cart__order__form__submit p {
+		top : -20px;
 	}
 }
 
