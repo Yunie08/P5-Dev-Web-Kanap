@@ -1,12 +1,6 @@
-fetch("http://localhost:3000/api/products/")
-  .then(function (res) {
-    if (res.ok) {
-      return res.json();
-    }
-  })
-  .then(function (jsonArticleList) {
-    let articleHtml = new DocumentFragment();
-    for (let article of jsonArticleList) {
+function displayHompageProducts(articleList) {
+  let articleHtml = new DocumentFragment();
+    for (let article of articleList) {
       let aElement = document.createElement("a");
       aElement.setAttribute("href", `./product.html?id=${article._id}`);
 
@@ -30,6 +24,16 @@ fetch("http://localhost:3000/api/products/")
       articleHtml.append(aElement);
     }
     document.getElementById("items").append(articleHtml);
+}
+
+fetch("http://localhost:3000/api/products/")
+  .then(function (res) {
+    if (res.ok) {
+      return res.json();
+    }
+  })
+  .then(function (jsonArticleList) {
+    displayHompageProducts(jsonArticleList);
   })
   .catch(function (err) {
     console.log(err);
