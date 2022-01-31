@@ -131,114 +131,109 @@ quantityInputsArray.forEach(function (quantityInput) {
 });
 
 /*************** Contact Form Management ***************/
-let contact = new Contact();
-let order = [];
-let inputCheck = {
-  firstNameValid: false,
-  lastNameValid: false,
-  addressValid: false,
-  cityValid: false,
-  emailValid: false,
-  cartValid: false,
-};
+// Getting all contact input elements
+const firstname = document.getElementById("firstName");
+const lastname = document.getElementById("lastName");
+const address = document.getElementById("address");
+const city = document.getElementById("city");
+const email = document.getElementById("email");
 
-/* "Prénom" input management */
-let firstname = document.getElementById("firstName");
-let firstNameErrorMsg = document.getElementById("firstNameErrorMsg");
+// Getting all error message elements
+const firstnameErrorMsg = document.getElementById("firstNameErrorMsg");
+const lastnameErrorMsg = document.getElementById("lastNameErrorMsg");
+const addressErrorMsg = document.getElementById("addressErrorMsg");
+const cityErrorMsg = document.getElementById("cityErrorMsg");
+const emailErrorMsg = document.getElementById("emailErrorMsg");
 
-firstname.addEventListener("change", function (event) {
-  event.stopPropagation();
-  if (event.target.value == "" || nameIsValid(event.target.value) == false) {
-    inputCheck.firstNameValid = false;
-    firstNameErrorMsg.innerText =
-      "Le prénom n'est pas valide (contient chiffres et/ou caractères spéciaux)";
-  } else {
-    contact.firstName = event.target.value;
-    inputCheck.firstNameValid = true;
-    clearMessage(firstNameErrorMsg);
+/**
+ * Apply REGEX validation
+ */
+function regexValidation(data, regex) {
+  return regex.test(data);
+}
+
+/**
+ * Display error message depending on which input not correct
+ * @param { string } input name in french
+ */
+function printErrorMessage(dataLabel) {
+  let errorMessageM = `Veuillez renseigner un ${dataLabel} valide`;
+  let errorMessageF = `Veuillez renseigner une ${dataLabel} valide`;
+
+  if (dataLabel == "prénom") {
+    firstnameErrorMsg.innerText = errorMessageM;
+    return;
+  } else if (dataLabel == "nom") {
+    lastnameErrorMsg.innerText = errorMessageM;
+    return;
+  } else if (dataLabel == "adresse") {
+    addressErrorMsg.innerText = errorMessageF;
+    return;
+  } else if (dataLabel == "ville") {
+    cityErrorMsg.innerText = errorMessageF;
+    return;
+  } else if (dataLabel == "adresse email") {
+    emailErrorMsg.innerText = errorMessageF;
+    return;
   }
-});
+}
 
-/* "Nom" input management */
-let lastname = document.getElementById("lastName");
-let lastNameErrorMsg = document.getElementById("lastNameErrorMsg");
-lastname.addEventListener("change", function (event) {
-  event.stopPropagation();
-  if (event.target.value == "" || nameIsValid(event.target.value) == false) {
-    inputCheck.lastNameValid = false;
-    lastNameErrorMsg.innerText =
-      "Le nom n'est pas valide (contient chiffres et/ou caractères spéciaux)";
-  } else {
-    contact.lastName = event.target.value;
-    inputCheck.lastNameValid = true;
-    clearMessage(lastNameErrorMsg);
-  }
-});
+/**
+ * Check all contact form inputs
+ * If any input is incorrect : display error message and return false
+ * Else return true
+ */
+function validateContactData() {
+  let namePattern = /^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$/;
+  let addressPattern = /^[^_!¡?÷?¿\/\+=@#$%ˆ^&*(){}|~<>;:[\]]{5,}$/;
+  let emailPattern = /^[\w\.-]+@[\w\.-]+\.\w{2,4}$/;
 
-/* "Adresse" input management */
-let address = document.getElementById("address");
-let addressErrorMsg = document.getElementById("addressErrorMsg");
-address.addEventListener("change", function (event) {
-  event.stopPropagation();
-  if (event.target.value == "" || addressIsValid(event.target.value) == false) {
-    inputCheck.addressValid = false;
-    addressErrorMsg.innerText = "L'adresse n'est pas valide";
-  } else {
-    contact.address = event.target.value;
-    inputCheck.addressValid = true;
-    clearMessage(addressErrorMsg);
-  }
-});
+  let contactValid = true;
 
-/* "Ville" input management */
-let city = document.getElementById("city");
-let cityErrorMsg = document.getElementById("cityErrorMsg");
-city.addEventListener("change", function (event) {
-  event.stopPropagation();
-  if (event.target.value == "" || nameIsValid(event.target.value) == false) {
-    inputCheck.cityValid = false;
-    cityErrorMsg.innerText = "La ville n'est pas valide";
-  } else {
-    contact.city = event.target.value;
-    inputCheck.cityValid = true;
-    clearMessage(cityErrorMsg);
+  let firstnameIsValid = regexValidation(firstname.value, namePattern);
+  if (firstnameIsValid == false) {
+    printErrorMessage("prénom");
+    contactValid = false;
   }
-});
-
-/* "Email" input management */
-let email = document.getElementById("email");
-let emailErrorMsg = document.getElementById("emailErrorMsg");
-email.addEventListener("change", function (event) {
-  event.stopPropagation();
-  if (event.target.value == "" || emailIsValid(event.target.value) == false) {
-    inputCheck.emailValid = false;
-    emailErrorMsg.innerText = "L'adresse email n'est pas valide";
-  } else {
-    contact.email = event.target.value;
-    inputCheck.emailValid = true;
-    clearMessage(emailErrorMsg);
+  let lastnameIsValid = regexValidation(lastname.value, namePattern);
+  if (lastnameIsValid == false) {
+    printErrorMessage("nom");
+    contactValid = false;
   }
-});
+  let addressIsValid = regexValidation(address.value, addressPattern);
+  if (addressIsValid == false) {
+    printErrorMessage("adresse");
+    contactValid = false;
+  }
+  let cityIsValid = regexValidation(city.value, namePattern);
+  if (cityIsValid == false) {
+    printErrorMessage("ville");
+    contactValid = false;
+  }
+  let emailIsValid = regexValidation(email.value, emailPattern);
+  if (emailIsValid == false) {
+    printErrorMessage("adresse email");
+    contactValid = false;
+  }
+  return contactValid;
+}
 
 let submit = document.getElementById("order");
 
-let orderInfo = new Order();
+function fillOrderData() {
+  let orderInfo = new Order();
+  let contact = new Contact();
 
-// function formIsComplete() {
-//   for (let data in orderInfo.contact) {
-//     if ((orderInfo.contact[data] == "") || (orderInfo.contact[data] == undefined)) {
-//       return false;
-//     }
-//   }
-//   return true;
-// }
+  contact.firstName = firstname.value;
+  contact.lastName = lastname.value;
+  contact.address = address.value;
+  contact.city = city.value;
+  contact.email = email.value;
 
-function dataIsValid(dataCheckArray) {
-  let dataValidity = true;
-  for (let item in dataCheckArray) {
-    dataValidity = dataValidity && dataCheckArray[item];
-  }
-  return dataValidity;
+  orderInfo.contact = contact;
+  orderInfo.products = getIds();
+
+  return orderInfo;
 }
 
 function getOrderId(value) {
@@ -249,14 +244,14 @@ function redirect(id) {
   document.location = `./confirmation.html?orderId=${id}`;
 }
 
-function sendOrder(e) {
+function sendOrder(order) {
   fetch("http://localhost:3000/api/products/order", {
     method: "POST",
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(orderInfo),
+    body: JSON.stringify(order),
   })
     .then(function (res) {
       if (res.ok) {
@@ -269,37 +264,39 @@ function sendOrder(e) {
     })
     .then(function (id) {
       redirect(id);
+    })
+    .catch(function (err) {
+      console.log(err);
     });
 }
 
-let submitErrMsg = document.getElementById("submitErrorMsg");
+let submitErrorMsg = document.getElementById("submitErrorMsg");
 
 submit.addEventListener("click", function (e) {
   e.preventDefault();
-  orderInfo.products = getIds();
-  orderInfo.contact = contact;
-  inputCheck.cartValid = orderInfo.products != 0;
-  let inputValid = dataIsValid(inputCheck);
-  if (inputValid == false) {
-    if (inputCheck.cartValid == false) {
-      submitErrMsg.innerText = "Votre panier est vide";
-    } else {
-      submitErrMsg.innerText = "Veuillez vérifier les informations de contact";
-    }
-  } else {
-    sendOrder();
+  let order = fillOrderData();
+  console.log(order);
+  let contactIsValid = validateContactData();
+  let cartIsValid = order.products != null;
+  if (contactIsValid && cartIsValid) {
+    sendOrder(order);
+  } else if (cartIsValid == false) {
+    submitErrMsg.innerText = "Votre panier est vide";
   }
 });
 
-/**
- * Remove submit message error whenever there is an input change
- */
-let inputList = document.querySelectorAll(
+/*************** Erasing error messages ***************/
+function clearMessage(element) {
+  element.innerText = "";
+}
+
+const formInputs = document.querySelectorAll(
   ".cart__order__form__question > input"
 );
 
-for (let input of inputList) {
-  input.addEventListener("change", function (e) {
-    clearMessage(submitErrMsg);
+formInputs.forEach((input) => {
+  input.addEventListener("click", function () {
+    clearMessage(input.nextElementSibling);
+    clearMessage(submitErrorMsg);
   });
-}
+});
