@@ -218,6 +218,13 @@ function validateContactData() {
   return contactValid;
 }
 
+function validateCart(cart) {
+  if (cart.products.length == 0) {
+    return false;
+  }
+  return true;
+}
+
 let submit = document.getElementById("order");
 
 function fillOrderData() {
@@ -277,11 +284,11 @@ submit.addEventListener("click", function (e) {
   let order = fillOrderData();
   console.log(order);
   let contactIsValid = validateContactData();
-  let cartIsValid = order.products != null;
+  let cartIsValid = validateCart(order);
   if (contactIsValid && cartIsValid) {
     sendOrder(order);
   } else if (cartIsValid == false) {
-    submitErrMsg.innerText = "Votre panier est vide";
+    submitErrorMsg.innerText = "Votre panier est vide";
   }
 });
 
@@ -296,6 +303,10 @@ const formInputs = document.querySelectorAll(
 
 formInputs.forEach((input) => {
   input.addEventListener("click", function () {
+    clearMessage(input.nextElementSibling);
+    clearMessage(submitErrorMsg);
+  });
+  input.addEventListener("input", function () {
     clearMessage(input.nextElementSibling);
     clearMessage(submitErrorMsg);
   });
