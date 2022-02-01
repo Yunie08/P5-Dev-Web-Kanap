@@ -1,5 +1,5 @@
 /**
- * 
+ * Create a customized DOM element 
  * @param {String} type 
  * @param {String} className 
  * @param {String} innerText 
@@ -21,3 +21,10 @@ function createElt(type,className,innerText,attributeName,attributeValue) {
   return element;
 }
 
+/**
+ * Erase element text
+ * @param { DOMElement } element 
+ */
+function clearMessage(element) {
+  element.innerText = "";
+}

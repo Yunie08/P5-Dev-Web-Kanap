@@ -283,9 +283,6 @@ submit.addEventListener("click", function (e) {
 });
 
 /*************** Erasing error messages ***************/
-function clearMessage(element) {
-  element.innerText = "";
-}
 
 const formInputs = document.querySelectorAll(
   ".cart__order__form__question > input"

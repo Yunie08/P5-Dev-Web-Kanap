@@ -114,8 +114,8 @@ document
  * Hide error message when user clicks on input elements
  */
 document.querySelector("input").addEventListener("click", function (e) {
-  productErrMsg.innerText = "";
+  clearMessage(productErrMsg);
 });
 document.querySelector("select").addEventListener("click", function (e) {
-  productErrMsg.innerText = "";
+  clearMessage(productErrMsg);
 });
