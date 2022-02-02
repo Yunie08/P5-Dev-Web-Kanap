@@ -29,6 +29,12 @@ function addArticle(article) {
   saveCart(cart);
 }
 
+/**
+ * Set the quantity of an article already in the cart
+ * @param { string } articleId
+ * @param { string } articleColor
+ * @param { number } articleQuantity
+ */
 function setArticleQuantity(articleId, articleColor, articleQuantity) {
   let cart = getCart();
   let articleInCart = isInCart(articleId, articleColor);
@@ -64,6 +70,7 @@ function getCart() {
 
 /**
  * Save cart in localStorage
+ * @param { Array } cart
  */
 function saveCart(cart) {
   localStorage.setItem("cart", JSON.stringify(cart));

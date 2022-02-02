@@ -5,81 +5,90 @@ let cartSection = document.getElementById("cart__items");
 /**
  * Create DOM elements for each item in cart
  */
-for (let article of cart) {
-  let articleElement = createElt(
-    "article",
-    "cart__item",
-    "",
-    "data-id",
-    `${article.id}`
-  );
-  articleElement.setAttribute("data-color", `${article.color}`);
+function displayCart(cart) {
+  for (let article of cart) {
+    let articleElement = createElt(
+      "article",
+      "cart__item",
+      "",
+      "data-id",
+      `${article.id}`
+    );
+    articleElement.setAttribute("data-color", `${article.color}`);
 
-  let div1Element = createElt("div", "cart__item__img");
-  articleElement.append(div1Element);
+    let div1Element = createElt("div", "cart__item__img");
+    articleElement.append(div1Element);
 
-  let imgElement = createElt("img", "", "", "src", `${article.imageUrl}`);
-  imgElement.setAttribute("alt", `${article.altTxt}`);
-  div1Element.append(imgElement);
+    let imgElement = createElt("img", "", "", "src", `${article.imageUrl}`);
+    imgElement.setAttribute("alt", `${article.altTxt}`);
+    div1Element.append(imgElement);
 
-  let div2Element = createElt("div", "cart__item__content");
-  articleElement.append(div2Element);
+    let div2Element = createElt("div", "cart__item__content");
+    articleElement.append(div2Element);
 
-  let div3Element = createElt("div", "cart__item__content__description");
-  div2Element.append(div3Element);
+    let div3Element = createElt("div", "cart__item__content__description");
+    div2Element.append(div3Element);
 
-  let h2Element = createElt("h2", "", `${article.name}`);
-  div3Element.append(h2Element);
+    let h2Element = createElt("h2", "", `${article.name}`);
+    div3Element.append(h2Element);
 
-  let p1Element = createElt("p", "", `${article.color}`);
-  h2Element.after(p1Element);
+    let p1Element = createElt("p", "", `${article.color}`);
+    h2Element.after(p1Element);
 
-  let p2Element = createElt("p", "", `${article.price} €`);
-  p1Element.after(p2Element);
+    let p2Element = createElt("p", "", `${article.price} €`);
+    p1Element.after(p2Element);
 
-  let div4Element = createElt("div", "cart__item__content__settings");
-  div2Element.append(div4Element);
+    let div4Element = createElt("div", "cart__item__content__settings");
+    div2Element.append(div4Element);
 
-  let div5Element = createElt("div", "cart__item__content__settings__quantity");
-  div4Element.append(div5Element);
+    let div5Element = createElt(
+      "div",
+      "cart__item__content__settings__quantity"
+    );
+    div4Element.append(div5Element);
 
-  let p3Element = createElt("p", "", "Qté : ");
-  div5Element.append(p3Element);
+    let p3Element = createElt("p", "", "Qté : ");
+    div5Element.append(p3Element);
 
-  let inputElement = createElt("input", "itemQuantity");
-  inputElement.setAttribute("type", "number");
-  inputElement.setAttribute("name", "itemQuantity");
-  inputElement.setAttribute("min", "1");
-  inputElement.setAttribute("max", "100");
-  inputElement.setAttribute("value", `${article.quantity}`);
-  div5Element.append(inputElement);
+    let inputElement = createElt("input", "itemQuantity");
+    inputElement.setAttribute("type", "number");
+    inputElement.setAttribute("name", "itemQuantity");
+    inputElement.setAttribute("min", "1");
+    inputElement.setAttribute("max", "100");
+    inputElement.setAttribute("value", `${article.quantity}`);
+    div5Element.append(inputElement);
 
-  let div6Element = createElt("div", "cart__item__content__settings__delete");
-  div4Element.append(div6Element);
+    let div6Element = createElt("div", "cart__item__content__settings__delete");
+    div4Element.append(div6Element);
 
-  let p4Element = createElt("p", "deleteItem", "Supprimer");
-  div6Element.append(p4Element);
+    let p4Element = createElt("p", "deleteItem", "Supprimer");
+    div6Element.append(p4Element);
 
-  cartHtml.append(articleElement);
+    cartHtml.append(articleElement);
+  }
+
+  cartSection.append(cartHtml);
 }
 
 /**
- * Insert created articles in HTML
+ * Display the computed total quantity of items in the cart
  */
-cartSection.append(cartHtml);
-
-function setTotalQuantity() {
+function displayTotalQuantity() {
   document.getElementById(
     "totalQuantity"
   ).innerText = `${computeTotalQuantity()}`;
 }
 
-function setTotalPrice() {
+/**
+ * Display the computed total price of the items in the cart
+ */
+function displayTotalPrice() {
   document.getElementById("totalPrice").innerText = `${computeTotalPrice()}`;
 }
 
-setTotalQuantity();
-setTotalPrice();
+displayCart(cart);
+displayTotalQuantity();
+displayTotalPrice();
 
 /**
  * Listen to click event on any ".deleteItem" button
@@ -93,8 +102,8 @@ removeButtonsArray.forEach(function (button) {
     event.stopPropagation();
     let closestArticle = button.closest("article");
     removeArticle(closestArticle.dataset.id, closestArticle.dataset.color);
-    setTotalQuantity();
-    setTotalPrice();
+    displayTotalQuantity();
+    displayTotalPrice();
     cartSection.removeChild(closestArticle);
   });
 });
@@ -115,8 +124,8 @@ quantityInputsArray.forEach(function (quantityInput) {
       closestArticle.dataset.color,
       event.target.value
     );
-    setTotalQuantity();
-    setTotalPrice();
+    displayTotalQuantity();
+    displayTotalPrice();
   });
 });
 
@@ -207,6 +216,7 @@ function validateContactData() {
   }
   return contactValid;
 }
+
 
 function validateCart(cart) {
   if (cart.products.length == 0) {
