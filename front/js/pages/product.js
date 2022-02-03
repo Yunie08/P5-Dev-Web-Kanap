@@ -34,6 +34,7 @@ function displayArticleInfos(article) {
   document.getElementById("colors").append(optionsHtml);
 }
 
+// Add validation to prevent negative and non integer input
 function addQuantityValidation() {
   let quantityInput = document.getElementById("quantity");
   quantityInput.setAttribute("oninput", "validity.valid||(value='');");
