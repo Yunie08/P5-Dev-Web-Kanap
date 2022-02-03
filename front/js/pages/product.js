@@ -34,8 +34,15 @@ function displayArticleInfos(article) {
   document.getElementById("colors").append(optionsHtml);
 }
 
+function addQuantityValidation() {
+  let quantityInput = document.getElementById("quantity");
+  quantityInput.setAttribute("oninput", "validity.valid||(value='');");
+}
+
 /**
  * Create a new Article and fill it with products infos from API, quantity and color from form
+ * @param {*} product
+ * @returns {Article} article
  */
 function createArticle(product) {
   let article = new Article(
@@ -50,6 +57,10 @@ function createArticle(product) {
   return article;
 }
 
+/**
+ * Add color and quantity values to an article
+ * @param { Article } article
+ */
 function completeArticle(article) {
   let color = document.getElementById("colors").value;
   let quantity = Number(document.getElementById("quantity").value);
@@ -71,6 +82,7 @@ fetch(`${productApi}`)
   .then(function (product) {
     displayArticleInfos(product);
     article = createArticle(product);
+    addQuantityValidation();
   })
   .catch(function (err) {
     console.log(err);
@@ -99,16 +111,17 @@ function validateArticle(article) {
 /**
  * Add article to cart if article is valid
  */
-document
-  .getElementById("addToCart")
-  .addEventListener("click", function (event) {
-    completeArticle(article);
-    let articleIsValid = validateArticle(article);
+function addToCartHandler() {
+  completeArticle(article);
+  let articleIsValid = validateArticle(article);
 
-    if (articleIsValid == true) {
-      addArticle(article);
-    }
-  });
+  if (articleIsValid == true) {
+    addArticle(article);
+  }
+}
+
+let addToCartButton = document.getElementById("addToCart");
+addToCartButton.addEventListener("click", addToCartHandler);
 
 /**
  * Hide error message when user clicks on input elements

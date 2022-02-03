@@ -1,6 +1,6 @@
 /**
  * Create HTML elements for each article in the article list and append them to the DOM
- * @param { Array } articleList 
+ * @param { Array } articleList
  */
 function displayHomePageProducts(articleList) {
   let articleHtml = new DocumentFragment();

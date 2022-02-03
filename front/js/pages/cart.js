@@ -1,3 +1,5 @@
+/*************** Cart display management ***************/
+
 let cart = getCart();
 let cartHtml = new DocumentFragment();
 let cartSection = document.getElementById("cart__items");
@@ -56,6 +58,7 @@ function displayCart(cart) {
     inputElement.setAttribute("min", "1");
     inputElement.setAttribute("max", "100");
     inputElement.setAttribute("value", `${article.quantity}`);
+    inputElement.setAttribute("oninput", "validity.valid||(value='');");
     div5Element.append(inputElement);
 
     let div6Element = createElt("div", "cart__item__content__settings__delete");
@@ -89,6 +92,8 @@ function displayTotalPrice() {
 displayCart(cart);
 displayTotalQuantity();
 displayTotalPrice();
+
+/*************** Cart modification management ***************/
 
 /**
  * Listen to click event on any ".deleteItem" button
@@ -217,7 +222,7 @@ function validateContactData() {
   return contactValid;
 }
 
-
+// Validate cart if not empty
 function validateCart(cart) {
   if (cart.products.length == 0) {
     return false;
@@ -225,8 +230,9 @@ function validateCart(cart) {
   return true;
 }
 
-let submit = document.getElementById("order");
+/*************** Cart submission ***************/
 
+// Fill order object from input and cart
 function fillOrderData() {
   let orderInfo = new Order();
   let contact = new Contact();
@@ -243,14 +249,27 @@ function fillOrderData() {
   return orderInfo;
 }
 
+/**
+ * Return order ID from API object
+ * @param { object } value
+ * @returns { string } order ID
+ */
 function getOrderId(value) {
   return value.orderId;
 }
 
-function redirect(id) {
-  document.location = `./confirmation.html?orderId=${id}`;
+/**
+ * Open confirmation page corresponding to given order ID
+ * @param { string } orderId
+ */
+function redirect(orderId) {
+  document.location = `./confirmation.html?orderId=${orderId}`;
 }
 
+/**
+ * Send POST request to API and retrieve data to open confirmation page
+ * @param { Order } order
+ */
 function sendOrder(order) {
   fetch("http://localhost:3000/api/products/order", {
     method: "POST",
@@ -266,6 +285,7 @@ function sendOrder(order) {
       }
     })
     .then(function (data) {
+      console.log(data);
       let id = getOrderId(data);
       return id;
     })
@@ -279,7 +299,13 @@ function sendOrder(order) {
 
 let submitErrorMsg = document.getElementById("submitErrorMsg");
 
-submit.addEventListener("click", function (e) {
+/**
+ * On event check order validity
+ * If the order is valid, it is sent
+ * If the order is not valid, diaply error message
+ * @param { event } e
+ */
+function submitHandler(e) {
   e.preventDefault();
   let order = fillOrderData();
   console.log(order);
@@ -290,7 +316,10 @@ submit.addEventListener("click", function (e) {
   } else if (cartIsValid == false) {
     submitErrorMsg.innerText = "Votre panier est vide";
   }
-});
+}
+
+let submit = document.getElementById("order");
+submit.addEventListener("click", submitHandler);
 
 /*************** Erasing error messages ***************/
 
