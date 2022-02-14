@@ -321,7 +321,7 @@ function sendOrder(order) {
 */
 function submitOnClick() {
   let submit = document.getElementById("order");
-  submit.addEventListener("click", function(e) {
+  submit.addEventListener("click", function (e) {
     e.preventDefault();
     let order = fillOrderData();
     let contactIsValid = validateContactData();

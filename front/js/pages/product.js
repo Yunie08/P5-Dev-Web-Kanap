@@ -11,7 +11,6 @@ function getId(currentUrl) {
   }
 }
 
-
 // Display all product informations
 function displayArticleInfos(article) {
   document.querySelector("title").textContent = article.name;
@@ -33,13 +32,11 @@ function displayArticleInfos(article) {
   document.getElementById("colors").append(optionsHtml);
 }
 
-
 // Add validation to prevent negative and non integer input
 function addQuantityValidation() {
   let quantityInput = document.getElementById("itemQuantity");
   quantityInput.setAttribute("oninput", "validity.valid||(value='');");
 }
-
 
 /**
  * Create a new Article and fill it with products infos from API, quantity and color from form
@@ -59,7 +56,6 @@ function createArticle(product) {
   return article;
 }
 
-
 /**
  * Add color and quantity values to an article
  * @param { Article } article
@@ -72,30 +68,28 @@ function completeArticle(article) {
   article.quantity = quantity;
 }
 
-
 let productId = getId(window.location.href);
 let productApi = "http://localhost:3000/api/products/" + productId;
 let article = new Article();
 
 // Fetch api with id and display corresponding product
 function getProduct() {
-fetch(`${productApi}`)
-  .then(function (res) {
-    if (res.ok) {
-      return res.json();
-    }
-  })
-  .then(function (product) {
-    displayArticleInfos(product);
-    article = createArticle(product);
-    addQuantityValidation();
-  })
-  .catch(function (err) {
-    console.log(err);
-  });
-};
+  fetch(`${productApi}`)
+    .then(function (res) {
+      if (res.ok) {
+        return res.json();
+      }
+    })
+    .then(function (product) {
+      displayArticleInfos(product);
+      article = createArticle(product);
+      addQuantityValidation();
+    })
+    .catch(function (err) {
+      console.log(err);
+    });
+}
 getProduct();
-
 
 /*
  Check if article quantity is valid (1 to 100) and if color is defined
@@ -111,35 +105,30 @@ function validateArticle(article) {
   ) {
     if (productMsg.classList.contains("validMessage")) {
       productMsg.classList.replace("validMessage", "errorMessage");
-    } 
-    productMsg.innerText =
-      "Veuillez renseigner une couleur et une quantité.";
+    }
+    productMsg.innerText = "Veuillez renseigner une couleur et une quantité.";
     return false;
   }
   if (productMsg.classList.contains("errorMessage")) {
-    productMsg.classList.replace("errorMessage","validMessage");
-  } 
+    productMsg.classList.replace("errorMessage", "validMessage");
+  }
   productMsg.innerText = "Votre article a été ajouté au panier !";
   return true;
 }
 
-
 // Add article to cart if article is valid
 function addToCart() {
   let addToCartButton = document.getElementById("addToCart");
-  addToCartButton.addEventListener("click", function(e){
+  addToCartButton.addEventListener("click", function (e) {
     completeArticle(article);
     let articleIsValid = validateArticle(article);
-  
+
     if (articleIsValid == true) {
       addArticle(article);
     }
   });
-};
+}
 addToCart();
-
-
-
 
 // Hide error message when user clicks on input elements
 function clearErrorMessages() {

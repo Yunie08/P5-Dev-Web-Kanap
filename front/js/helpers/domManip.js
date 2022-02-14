@@ -1,29 +1,29 @@
 /**
- * Create a customized DOM element 
- * @param {String} type 
- * @param {String} className 
- * @param {String} innerText 
- * @param {String} attributeName 
- * @param {String} attributeValue 
+ * Create a customized DOM element
+ * @param {String} type
+ * @param {String} className
+ * @param {String} innerText
+ * @param {String} attributeName
+ * @param {String} attributeValue
  * @returns { DOMElement } element
  */
-function createElt(type,className,innerText,attributeName,attributeValue) {
+function createElt(type, className, innerText, attributeName, attributeValue) {
   let element = document.createElement(type);
-  if ((className !== undefined) && (className !== "")) {
+  if (className !== undefined && className !== "") {
     element.classList.add(`${className}`);
   }
-  if ((innerText !== undefined) && (innerText !== "")) {
+  if (innerText !== undefined && innerText !== "") {
     element.innerText = innerText;
   }
-  if ((attributeName !== undefined) && (attributeName !== "")) {
-    element.setAttribute(attributeName,attributeValue);
+  if (attributeName !== undefined && attributeName !== "") {
+    element.setAttribute(attributeName, attributeValue);
   }
   return element;
 }
 
 /**
  * Erase element inner text
- * @param { DOMElement } element 
+ * @param { DOMElement } element
  */
 function clearMessage(element) {
   element.innerText = "";

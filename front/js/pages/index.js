@@ -48,6 +48,6 @@ function main() {
     .catch(function (err) {
       console.log(err);
     });
-};
+}
 
 main();
