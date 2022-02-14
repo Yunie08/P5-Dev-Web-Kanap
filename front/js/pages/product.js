@@ -97,21 +97,18 @@ getProduct();
 */
 const productMsg = document.getElementById("productMsg");
 function validateArticle(article) {
+  productMsg.className = "";
   if (
     article.color === null ||
     article.color === "" ||
     article.quantity <= 0 ||
     article.quantity >= 100
   ) {
-    if (productMsg.classList.contains("validMessage")) {
-      productMsg.classList.replace("validMessage", "errorMessage");
-    }
+    productMsg.classList.add("errorMessage");
     productMsg.innerText = "Veuillez renseigner une couleur et une quantité.";
     return false;
   }
-  if (productMsg.classList.contains("errorMessage")) {
-    productMsg.classList.replace("errorMessage", "validMessage");
-  }
+  productMsg.classList.add("validMessage");
   productMsg.innerText = "Votre article a été ajouté au panier !";
   return true;
 }
@@ -133,10 +130,10 @@ addToCart();
 // Hide error message when user clicks on input elements
 function clearErrorMessages() {
   document.querySelector("input").addEventListener("click", function (e) {
-    clearMessage(productErrMsg);
+    clearMessage(productMsg);
   });
   document.querySelector("select").addEventListener("click", function (e) {
-    clearMessage(productErrMsg);
+    clearMessage(productMsg);
   });
 }
 clearErrorMessages();

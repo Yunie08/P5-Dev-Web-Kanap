@@ -92,20 +92,20 @@
 }
 
 .item__content__addButton p,
-#productMsg.errorMessage {
-	/* position: absolute; */
-	color: #fbbcbc;
+#productMsg {
 	font-size: 15px;
 	top : -10px;
 	text-align: center;
 }
+
+.item__content__addButton p,
+#productMsg.errorMessage {
+	color: #fbbcbc;
+}
+
 .item__content__addButton p,
 #productMsg.validMessage {
-	/* position: absolute; */
 	color: #fff;
-	font-size: 15px;
-	top : -10px;
-	text-align: center;
 }
 
 
