@@ -29,9 +29,9 @@ The project consists in developping the dynamic aspects of Kanap website with Ja
 The scope include front-end Javascript only. Back-end, HTML and CSS were provided.
 
 ### Evaluated skills
-:heavy_check_mark:  Interacting with an API using Javascript
-:heavy_check_mark:  Handling Javascript events
-:heavy_check_mark:  Implementing external data validation 
+:heavy_check_mark:  Interacting with an API using Javascript  
+:heavy_check_mark:  Handling Javascript events  
+:heavy_check_mark:  Implementing external data validation  
 :heavy_check_mark:  Creating a test plan  
 
 ### Implemented functionalities
