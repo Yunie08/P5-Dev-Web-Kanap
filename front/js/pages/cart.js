@@ -1,13 +1,12 @@
-/*************** Cart display management ***************/
+/*------------------------------ Cart display management ------------------------------*/
 
 let cart = getCart();
-let cartHtml = new DocumentFragment();
 let cartSection = document.getElementById("cart__items");
 
-/**
- * Create DOM elements for each item in cart
- */
+// Create DOM elements for each item in cart
 function displayCart(cart) {
+  let cartHtml = new DocumentFragment();
+
   for (let article of cart) {
     let articleElement = createElt(
       "article",
@@ -72,69 +71,66 @@ function displayCart(cart) {
 
   cartSection.append(cartHtml);
 }
+displayCart(cart);
 
-/**
- * Display the computed total quantity of items in the cart
- */
+// Display the computed total quantity of items in the cart
 function displayTotalQuantity() {
   document.getElementById(
     "totalQuantity"
   ).innerText = `${computeTotalQuantity()}`;
 }
+displayTotalQuantity();
 
-/**
- * Display the computed total price of the items in the cart
- */
+// Display the computed total price of the items in the cart
 function displayTotalPrice() {
   document.getElementById("totalPrice").innerText = `${computeTotalPrice()}`;
 }
-
-displayCart(cart);
-displayTotalQuantity();
 displayTotalPrice();
 
-/*************** Cart modification management ***************/
+/*------------------------------ Cart modification management ------------------------------*/
 
-/**
- * Listen to click event on any ".deleteItem" button
- * On click : remove related article from page and cart
- */
-let removeButtonsCollection = document.getElementsByClassName("deleteItem");
-let removeButtonsArray = Array.from(removeButtonsCollection);
+// On delete button click event : remove related article from page and cart
+function removeCartArticle() {
+  let removeButtonsCollection = document.getElementsByClassName("deleteItem");
+  let removeButtonsArray = Array.from(removeButtonsCollection);
 
-removeButtonsArray.forEach(function (button) {
-  button.addEventListener("click", function (event) {
-    event.stopPropagation();
-    let closestArticle = button.closest("article");
-    removeArticle(closestArticle.dataset.id, closestArticle.dataset.color);
-    displayTotalQuantity();
-    displayTotalPrice();
-    cartSection.removeChild(closestArticle);
+  removeButtonsArray.forEach(function (button) {
+    button.addEventListener("click", function (event) {
+      event.stopPropagation();
+      let closestArticle = button.closest("article");
+      removeArticle(closestArticle.dataset.id, closestArticle.dataset.color);
+      displayTotalQuantity();
+      displayTotalPrice();
+      cartSection.removeChild(closestArticle);
+    });
   });
-});
+}
+removeCartArticle();
 
-/**
- * Listen to change event on any "itemQuantity" input
- * On change: update article quantity in cart
- */
-let quantityInputsCollection = document.getElementsByClassName("itemQuantity");
-let quantityInputsArray = Array.from(quantityInputsCollection);
+// On item quantity change event: update article quantity in cart
+function updateCartInfos() {
+  let quantityInputsCollection =
+    document.getElementsByClassName("itemQuantity");
+  let quantityInputsArray = Array.from(quantityInputsCollection);
 
-quantityInputsArray.forEach(function (quantityInput) {
-  quantityInput.addEventListener("change", function (event) {
-    event.stopPropagation();
-    let closestArticle = quantityInput.closest("article");
-    setArticleQuantity(
-      closestArticle.dataset.id,
-      closestArticle.dataset.color,
-      event.target.value
-    );
-    displayTotalQuantity();
-    displayTotalPrice();
+  quantityInputsArray.forEach(function (quantityInput) {
+    quantityInput.addEventListener("change", function (event) {
+      event.stopPropagation();
+      let closestArticle = quantityInput.closest("article");
+      setArticleQuantity(
+        closestArticle.dataset.id,
+        closestArticle.dataset.color,
+        event.target.value
+      );
+      displayTotalQuantity();
+      displayTotalPrice();
+    });
   });
-});
+}
+updateCartInfos();
 
-/*************** Contact Form Management ***************/
+/*------------------------------ Contact form management and validation ------------------------------*/
+
 // Getting all contact input elements
 const firstname = document.getElementById("firstName");
 const lastname = document.getElementById("lastName");
@@ -142,15 +138,11 @@ const address = document.getElementById("address");
 const city = document.getElementById("city");
 const email = document.getElementById("email");
 
-// Getting all error message elements
-const firstnameErrorMsg = document.getElementById("firstNameErrorMsg");
-const lastnameErrorMsg = document.getElementById("lastNameErrorMsg");
-const addressErrorMsg = document.getElementById("addressErrorMsg");
-const cityErrorMsg = document.getElementById("cityErrorMsg");
-const emailErrorMsg = document.getElementById("emailErrorMsg");
-
 /**
- * Apply REGEX validation
+ * Apply regex validation
+ * @param { string } data
+ * @param { reg } regex
+ * @returns { boolean }
  */
 function regexValidation(data, regex) {
   return regex.test(data);
@@ -161,32 +153,58 @@ function regexValidation(data, regex) {
  * @param { string } input name in french
  */
 function printErrorMessage(dataLabel) {
+  // Getting all error message elements
+  const firstnameErrorMsg = document.getElementById("firstNameErrorMsg");
+  const lastnameErrorMsg = document.getElementById("lastNameErrorMsg");
+  const addressErrorMsg = document.getElementById("addressErrorMsg");
+  const cityErrorMsg = document.getElementById("cityErrorMsg");
+  const emailErrorMsg = document.getElementById("emailErrorMsg");
+
+  // Custom error message for each input
   let errorMessageM = `Veuillez renseigner un ${dataLabel} valide`;
   let errorMessageF = `Veuillez renseigner une ${dataLabel} valide`;
 
-  if (dataLabel == "prénom") {
-    firstnameErrorMsg.innerText = errorMessageM;
-    return;
-  } else if (dataLabel == "nom") {
-    lastnameErrorMsg.innerText = errorMessageM;
-    return;
-  } else if (dataLabel == "adresse") {
-    addressErrorMsg.innerText = errorMessageF;
-    return;
-  } else if (dataLabel == "ville") {
-    cityErrorMsg.innerText = errorMessageF;
-    return;
-  } else if (dataLabel == "adresse email") {
-    emailErrorMsg.innerText = errorMessageF;
-    return;
+  switch (dataLabel) {
+    case "prénom":
+      firstnameErrorMsg.innerText = errorMessageM;
+      break;
+    case "nom":
+      lastnameErrorMsg.innerText = errorMessageM;
+      break;
+    case "adresse":
+      addressErrorMsg.innerText = errorMessageF;
+      break;
+    case "ville":
+      cityErrorMsg.innerText = errorMessageF;
+      break;
+    case "adresse email":
+      emailErrorMsg.innerText = errorMessageF;
+      break;
   }
 }
 
-/**
- * Check all contact form inputs
- * If any input is incorrect : display error message and return false
- * Else return true
- */
+let submitErrorMsg = document.getElementById("submitErrorMsg");
+
+// Erase error when user change or click on input
+function eraseErrors() {
+  const formInputs = document.querySelectorAll(
+    ".cart__order__form__question > input"
+  );
+
+  formInputs.forEach((input) => {
+    input.addEventListener("click", function () {
+      clearMessage(input.nextElementSibling);
+      clearMessage(submitErrorMsg);
+    });
+    input.addEventListener("input", function () {
+      clearMessage(input.nextElementSibling);
+      clearMessage(submitErrorMsg);
+    });
+  });
+}
+eraseErrors();
+
+// Check all contact form inputs and display error message if not valid
 function validateContactData() {
   let namePattern = /^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$/;
   let addressPattern = /^[^_!¡?÷?¿\/\+=@#$%ˆ^&*(){}|~<>;:[\]]{5,}$/;
@@ -230,7 +248,7 @@ function validateCart(cart) {
   return true;
 }
 
-/*************** Cart submission ***************/
+/*------------------------------ Cart submission ------------------------------*/
 
 // Fill order object from input and cart
 function fillOrderData() {
@@ -285,7 +303,6 @@ function sendOrder(order) {
       }
     })
     .then(function (data) {
-      console.log(data);
       let id = getOrderId(data);
       return id;
     })
@@ -297,43 +314,23 @@ function sendOrder(order) {
     });
 }
 
-let submitErrorMsg = document.getElementById("submitErrorMsg");
-
-/**
- * On event check order validity
- * If the order is valid, it is sent
- * If the order is not valid, diaply error message
- * @param { event } e
- */
-function submitHandler(e) {
-  e.preventDefault();
-  let order = fillOrderData();
-  console.log(order);
-  let contactIsValid = validateContactData();
-  let cartIsValid = validateCart(order);
-  if (contactIsValid && cartIsValid) {
-    sendOrder(order);
-  } else if (cartIsValid == false) {
-    submitErrorMsg.innerText = "Votre panier est vide";
-  }
+/*
+  On click event check order validity
+  If the order is valid, it is sent
+  If the order is not valid, display error message
+*/
+function submitOnClick() {
+  let submit = document.getElementById("order");
+  submit.addEventListener("click", function(e) {
+    e.preventDefault();
+    let order = fillOrderData();
+    let contactIsValid = validateContactData();
+    let cartIsValid = validateCart(order);
+    if (contactIsValid && cartIsValid) {
+      sendOrder(order);
+    } else if (cartIsValid == false) {
+      submitErrorMsg.innerText = "Votre panier est vide";
+    }
+  });
 }
-
-let submit = document.getElementById("order");
-submit.addEventListener("click", submitHandler);
-
-/*************** Erasing error messages ***************/
-
-const formInputs = document.querySelectorAll(
-  ".cart__order__form__question > input"
-);
-
-formInputs.forEach((input) => {
-  input.addEventListener("click", function () {
-    clearMessage(input.nextElementSibling);
-    clearMessage(submitErrorMsg);
-  });
-  input.addEventListener("input", function () {
-    clearMessage(input.nextElementSibling);
-    clearMessage(submitErrorMsg);
-  });
-});
+submitOnClick();

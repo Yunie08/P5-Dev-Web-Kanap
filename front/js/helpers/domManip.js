@@ -22,7 +22,7 @@ function createElt(type,className,innerText,attributeName,attributeValue) {
 }
 
 /**
- * Erase element text
+ * Erase element inner text
  * @param { DOMElement } element 
  */
 function clearMessage(element) {

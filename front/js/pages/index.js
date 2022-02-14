@@ -34,15 +34,20 @@ function displayHomePageProducts(articleList) {
   document.getElementById("items").append(articleHtml);
 }
 
-fetch("http://localhost:3000/api/products/")
-  .then(function (res) {
-    if (res.ok) {
-      return res.json();
-    }
-  })
-  .then(function (jsonArticleList) {
-    displayHomePageProducts(jsonArticleList);
-  })
-  .catch(function (err) {
-    console.log(err);
-  });
+// Fetch api and display returned products list
+function main() {
+  fetch("http://localhost:3000/api/products/")
+    .then(function (res) {
+      if (res.ok) {
+        return res.json();
+      }
+    })
+    .then(function (jsonArticleList) {
+      displayHomePageProducts(jsonArticleList);
+    })
+    .catch(function (err) {
+      console.log(err);
+    });
+};
+
+main();

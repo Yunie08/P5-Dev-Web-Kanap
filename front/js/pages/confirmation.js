@@ -11,9 +11,16 @@ function getId(currentUrl) {
   }
 }
 
-let productId = getId(window.location.href);
-let orderElement = document.getElementById("orderId");
+// Display ordrer id
+function displayOrderId() {
+  let productId = getId(window.location.href);
+  let orderElement = document.getElementById("orderId");
+  orderElement.innerText = productId;
+}
+displayOrderId();
 
-orderElement.innerText = productId;
-
-localStorage.clear();
+// Clear local storage
+function clearStorage() {
+  localStorage.clear();
+}
+clearStorage();
