@@ -100,9 +100,14 @@ h2 {
 	margin-left: 50px;
 	color: var(--text-color);
 }
+
 .menu nav ul li:hover {
 	font-weight: 600;
 	color: #3498db !important;
+}
+/* Ajout après correction html */
+.menu nav ul li a {
+	color: inherit !important;
 }
 
 /*banniere*/
@@ -259,7 +264,8 @@ footer .footerSecondary {
 		padding: 0;
 		line-height: 80px;
 	}
-	.menu nav ul a:first-child li {
+	/*  Modification suite correction erreurs HTML */
+	.menu nav ul li:first-child {
 		margin-left: 0;
 	}
 	.items a {
