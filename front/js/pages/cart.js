@@ -132,11 +132,21 @@ updateCartInfos();
 /*------------------------------ Contact form management and validation ------------------------------*/
 
 // Getting all contact input elements
-const firstname = document.getElementById("firstName");
-const lastname = document.getElementById("lastName");
-const address = document.getElementById("address");
-const city = document.getElementById("city");
-const email = document.getElementById("email");
+const firstNameElt = document.getElementById("firstName");
+const lastNameElt = document.getElementById("lastName");
+const addressElt = document.getElementById("address");
+const cityElt = document.getElementById("city");
+const emailElt = document.getElementById("email");
+
+// Fill Input object with DOM element, value and clean label
+function getInputInfo(inputElt) {
+  const inputValue = inputElt.value;
+  const inputLabelRaw = inputElt.previousElementSibling.innerText;
+  const inputLabel = inputLabelRaw.split(':')[0].toLowerCase();
+
+  let input = new Input(inputElt, inputValue, inputLabel, '');
+  return input;
+}
 
 /**
  * Apply regex validation
@@ -149,38 +159,13 @@ function regexValidation(data, regex) {
 }
 
 /**
- * Display error message depending on which input not correct
- * @param { string } input name in french
+ * Display error message depending on which input is incorrect
+ * @param { Element } inputElt
+ * @param { String } inputLabel 
  */
-function printErrorMessage(dataLabel) {
-  // Getting all error message elements
-  const firstnameErrorMsg = document.getElementById("firstNameErrorMsg");
-  const lastnameErrorMsg = document.getElementById("lastNameErrorMsg");
-  const addressErrorMsg = document.getElementById("addressErrorMsg");
-  const cityErrorMsg = document.getElementById("cityErrorMsg");
-  const emailErrorMsg = document.getElementById("emailErrorMsg");
-
-  // Custom error message for each input
-  let errorMessageM = `Veuillez renseigner un ${dataLabel} valide`;
-  let errorMessageF = `Veuillez renseigner une ${dataLabel} valide`;
-
-  switch (dataLabel) {
-    case "prénom":
-      firstnameErrorMsg.innerText = errorMessageM;
-      break;
-    case "nom":
-      lastnameErrorMsg.innerText = errorMessageM;
-      break;
-    case "adresse":
-      addressErrorMsg.innerText = errorMessageF;
-      break;
-    case "ville":
-      cityErrorMsg.innerText = errorMessageF;
-      break;
-    case "adresse email":
-      emailErrorMsg.innerText = errorMessageF;
-      break;
-  }
+function printErrorMessage(inputElt, inputLabel) {
+  const inputErrorMsg = inputElt.nextElementSibling;
+  inputErrorMsg.innerText = `Veuillez renseigner un(e) ${inputLabel} valide`;
 }
 
 let submitErrorMsg = document.getElementById("submitErrorMsg");
@@ -210,32 +195,28 @@ function validateContactData() {
   let addressPattern = /^[^_!¡?÷?¿\/\+=@#$%ˆ^&*(){}|~<>;:[\]]{5,}$/;
   let emailPattern = /^[\w\.-]+@[\w\.-]+\.\w{2,4}$/;
 
+  const firstName = getInputInfo(firstNameElt);
+  const lastName = getInputInfo(lastNameElt);
+  const address = getInputInfo(addressElt);
+  const city = getInputInfo(cityElt);
+  const email = getInputInfo(emailElt);
+
+  firstName.pattern = namePattern;
+  lastName.pattern = namePattern;
+  city.pattern = namePattern;
+  address.pattern = addressPattern;
+  email.pattern = emailPattern;
+  
+  const inputs = [firstName, lastName, address, city, email];
+
   let contactValid = true;
 
-  let firstnameIsValid = regexValidation(firstname.value, namePattern);
-  if (firstnameIsValid == false) {
-    printErrorMessage("prénom");
-    contactValid = false;
-  }
-  let lastnameIsValid = regexValidation(lastname.value, namePattern);
-  if (lastnameIsValid == false) {
-    printErrorMessage("nom");
-    contactValid = false;
-  }
-  let addressIsValid = regexValidation(address.value, addressPattern);
-  if (addressIsValid == false) {
-    printErrorMessage("adresse");
-    contactValid = false;
-  }
-  let cityIsValid = regexValidation(city.value, namePattern);
-  if (cityIsValid == false) {
-    printErrorMessage("ville");
-    contactValid = false;
-  }
-  let emailIsValid = regexValidation(email.value, emailPattern);
-  if (emailIsValid == false) {
-    printErrorMessage("adresse email");
-    contactValid = false;
+  for (let input of inputs) {
+    let inputIsValid = regexValidation(input.value, input.pattern);
+    if (!inputIsValid) {
+      printErrorMessage(input.element, input.label);
+      contactValid = false;
+    }
   }
   return contactValid;
 }
@@ -255,11 +236,11 @@ function fillOrderData() {
   let orderInfo = new Order();
   let contact = new Contact();
 
-  contact.firstName = firstname.value;
-  contact.lastName = lastname.value;
-  contact.address = address.value;
-  contact.city = city.value;
-  contact.email = email.value;
+  contact.firstName = firstNameElt.value;
+  contact.lastName = lastNameElt.value;
+  contact.address = addressElt.value;
+  contact.city = cityElt.value;
+  contact.email = emailElt.value;
 
   orderInfo.contact = contact;
   orderInfo.products = getIds();
